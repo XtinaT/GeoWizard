@@ -29,6 +29,10 @@
     "lint": "eslint --debug src/",
     "lint:write": "eslint --debug ./src --fix",
     "prettier": "prettier --write ./src",
+    "check-types": "tsc --pretty --noEmit",
+    "check-format": "prettier --check .",
+    "check-lint": "eslint . --ext ts --ext tsx --ext js --fix",
+    "test-all": "npm run check-format && npm run check-lint && npm run check-types && npm run build",
     "prepare": "husky install"
   },
   "eslintConfig": {
