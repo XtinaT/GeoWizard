@@ -17,5 +17,5 @@ This is a React application for creating "Projects" with geographic areas of int
 ## How to Run
 1. Clone this repository:
    ```bash
-   git clone https://github.com/<your-username>/<repository-name>.git
-   cd <repository-name>
+   git clone https://github.com/XtinaT/GeoWizard.git
+   cd GeoWizard
