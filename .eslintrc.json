@@ -3,14 +3,17 @@
     "browser": true,
     "es2021": true
   },
+  "globals": {
+    "module": "readonly"
+  },
   "extends": ["eslint:recommended", "plugin:react/recommended", "plugin:@typescript-eslint/recommended", "prettier"],
-  "overrides": [],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "project": "./tsconfig.json",
     "ecmaVersion": "latest",
     "sourceType": "module"
   },
+  "ignorePatterns": ["build/", "node_modules/"],
   "plugins": ["react", "@typescript-eslint", "import", "jsx-a11y"],
   "rules": {
     "import/imports-first": ["error", "absolute-first"],

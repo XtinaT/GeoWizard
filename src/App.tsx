@@ -1,7 +1,13 @@
 import React from "react";
 
+import { RootLayout } from "./RootLayout";
+
 export function App() {
-  return <div>Hi</div>;
+  return (
+    <RootLayout>
+      <div>Hi</div>
+    </RootLayout>
+  );
 }
 
 export default App;
