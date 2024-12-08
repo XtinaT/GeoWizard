@@ -5,12 +5,13 @@ module.exports = {
   theme: {
     extend: {
       backgroundImage: {
-        gradient: "linear-gradient(90deg, #051717, #265c61)",
+        gradient: "linear-gradient(90deg, #051717, #265C61)",
       },
       colors: {
-        "brand-green": "#48cdaf",
+        "brand-green": "#48CDAF",
         "brand-grey": "#657677",
-        "btn-bg": "#1E2F2F",
+        error: "#FF4D4D",
+        "btn-bg": "#051717",
       },
       fontSize: {
         8: "0.5rem",
