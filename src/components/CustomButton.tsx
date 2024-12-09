@@ -4,14 +4,14 @@ import ButtonSpinner from "./ButtonSpinner";
 
 type CustomButtonPropsType = {
   text: string;
-  onSubmit?: () => void;
+  onButtonClick?: () => void;
   disabled?: boolean;
   isLoading?: boolean;
   type?: "button" | "submit" | "reset" | undefined;
 };
 const CustomButton = ({
   text,
-  onSubmit,
+  onButtonClick,
   disabled = false,
   isLoading = false,
   type = "submit",
@@ -20,8 +20,9 @@ const CustomButton = ({
     <button
       type={type}
       disabled={disabled || isLoading}
-      onClick={onSubmit}
+      onClick={onButtonClick}
       className="rounded-full py-4 px-3 bg-btn-bg bg-opacity-60 text-brand-green font-semibold grow opacity hover:bg-opacity-90 transition-all cursor-pointer disabled:opacity-50 disabled:hover:bg-opacity-60 disabled:cursor-not-allowed"
+      aria-label={isLoading ? "Submitting..." : text}
     >
       {isLoading ? <ButtonSpinner /> : <>{text}</>}
     </button>

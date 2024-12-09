@@ -17,3 +17,11 @@ export type CustomInputProps = {
   showError?: boolean;
   type: TextInput;
 } & (InputProps | TextAreaProps);
+
+export type Data = {
+  file: File | undefined;
+  name: string;
+  description: string;
+  startDate: Date;
+  endDate: Date;
+};

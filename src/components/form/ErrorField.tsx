@@ -1,6 +1,6 @@
 import React, { ReactNode } from "react";
 
-import { error } from "../assets/icons/icons";
+import { error } from "../../assets/icons/icons";
 
 type ErrorPropsType = {
   message: ReactNode;

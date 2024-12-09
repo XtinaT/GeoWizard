@@ -1,13 +1,13 @@
 import React from "react";
 
+import StepForm from "./form/StepForm";
 import Header from "./Header";
-import StepForm from "./StepForm";
 
-const Dashboard = () => {
+const Dashboard = ({ onNext }: { onNext: (data: string) => void }) => {
   return (
     <div className="flex flex-col items-center gap-12">
       <Header />
-      <StepForm />
+      <StepForm onNext={onNext} />
     </div>
   );
 };
