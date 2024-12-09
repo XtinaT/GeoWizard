@@ -1,8 +1,8 @@
 import React, { ChangeEvent } from "react";
 
 import ErrorField from "./ErrorField";
-import { TextInput } from "../constants";
-import { CustomInputProps, InputProps, TextAreaProps } from "../models/models";
+import { TextInput } from "../../constants";
+import { CustomInputProps, InputProps, TextAreaProps } from "../../models/models";
 
 const CustomTextInput = ({
   error,
@@ -14,13 +14,13 @@ const CustomTextInput = ({
   type,
   ...inputProps
 }: CustomInputProps) => {
-  const baseClasses = `block w-full px-[16px] py-[14px] text-16 border font-medium ${type === TextInput.TEXTAREA ? "rounded-lg resize-none" : "rounded-full"} caret-brand-green focus-visible:outline focus-visible:outline-brand-green focus-visible:bg-black focus-visible:bg-opacity-50 appearance-none`;
-
-  const textClasses = "text-white placeholder:text-brand-grey";
-
-  const backgroundClasses = error ? "border-error bg-black bg-opacity-30" : "bg-black bg-opacity-40 border-none";
-
-  const classes = `${baseClasses} ${textClasses} ${backgroundClasses}`;
+  const classes = `
+  block w-full px-[16px] py-[14px] text-16 border font-medium 
+  ${type === TextInput.TEXTAREA ? "rounded-lg resize-none" : "rounded-full"} 
+  caret-brand-green focus-visible:outline focus-visible:outline-brand-green focus-visible:bg-black focus-visible:bg-opacity-50 appearance-none
+  text-white placeholder:text-brand-grey 
+  ${error ? "border-error bg-black bg-opacity-30" : "bg-black bg-opacity-40 border-none"}
+`;
 
   const handleOnChange = (e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>) => {
     let inputValue = e.target.value;

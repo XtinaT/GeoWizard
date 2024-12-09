@@ -2,16 +2,15 @@ import React, { ReactNode, useEffect, useRef, useState } from "react";
 
 import axios, { AxiosProgressEvent, AxiosRequestConfig, Canceler } from "axios";
 
-import { uploadFile } from "../actions";
 import ErrorField from "./ErrorField";
-import { closeIcon, deleteIcon, uploaded, uploadFailed } from "../assets/icons/icons";
-import { fileFormats, Status } from "../constants";
+import { uploadFile } from "../../actions";
+import { closeIcon, deleteIcon, uploaded, uploadFailed } from "../../assets/icons/icons";
+import { fileFormats, Status } from "../../constants";
 
 type InputPropsType = {
   name: string;
-  setFileURL: (url: string, name: string) => void;
-  fileURL: string;
-  fileName: string;
+  setFile: (value: File | undefined) => void;
+  file: File | undefined;
   isUploaded: boolean;
   setIsUploaded: (value: boolean) => void;
   disabled: boolean;
@@ -22,11 +21,10 @@ type InputPropsType = {
 
 const DragAndDropInput = ({
   name,
-  fileURL,
-  fileName,
+  file,
   isUploaded,
   disabled,
-  setFileURL,
+  setFile,
   setIsUploaded,
   supportedFormats,
   maxSize,
@@ -36,19 +34,11 @@ const DragAndDropInput = ({
 
   const [status, setStatus] = useState<Status>(Status.DEFAULT);
   const [errorMessage, setErrorMessage] = useState("Incorrect format");
-  const [file, setFile] = useState<File>();
   const [uploadedPercentage, setUploadedPercentage] = useState(0);
   const [isFormatCorrect, setFormat] = useState(true);
 
   const cancelFileUpload = useRef<Canceler | null>(null);
-
   const formData = new FormData();
-
-  useEffect(() => {
-    if (fileName && fileURL) {
-      setStatus(Status.LOADED);
-    }
-  }, [fileName, fileURL]);
 
   const checkFileConfig = (doc: File) => {
     const allowedTypes: string[] = supportedFormats.map((format) => fileFormats[format as keyof typeof fileFormats]);
@@ -86,7 +76,7 @@ const DragAndDropInput = ({
     };
 
     const handleUploadResponse = () => {
-      setFileURL("mockedUrl", file?.name || "");
+      setFile(file);
       setIsUploaded(true);
     };
 
@@ -116,14 +106,12 @@ const DragAndDropInput = ({
     const { files } = e.target;
     if (files && files.length) {
       setFile(files[0]);
-      setFileURL(fileURL, files[0].name);
       e.target.value = "";
     }
   };
   const handleFileDelete = () => {
     setStatus(Status.DEFAULT);
     setFile(undefined);
-    setFileURL("", "");
     setIsUploaded(false);
   };
   const handleDrag = (e: React.DragEvent<HTMLDivElement>) => {
@@ -138,7 +126,6 @@ const DragAndDropInput = ({
       const { files } = e.dataTransfer;
       if (files && files.length) {
         setFile(e.dataTransfer.files[0]);
-        setFileURL(fileURL, files[0].name);
       }
     }
   };
@@ -158,7 +145,7 @@ const DragAndDropInput = ({
               {status === Status.LOADING && (
                 <>
                   <div className="flex gap-2 items-center">
-                    <span className="text-16 font-medium text-white">{fileName}</span>
+                    <span className="text-16 font-medium text-white">{file?.name}</span>
                   </div>
                   <div className="grow flex items-center rounded-[120px] p-0.5 bg-white bg-opacity-15">
                     <p className="h-2 rounded-[199px] bg-white" style={{ width: `${uploadedPercentage}%` }} />
@@ -170,7 +157,7 @@ const DragAndDropInput = ({
                 <>
                   {isUploaded ? (
                     <div className="flex w-full items-center justify-between">
-                      <span className="text-16 font-medium text-white">{fileName}</span>
+                      <span className="text-16 font-medium text-white">{file?.name}</span>
                       {uploaded}
                     </div>
                   ) : (
@@ -227,7 +214,6 @@ const DragAndDropInput = ({
               </div>
             )}
           </div>
-
           {
             <span className="text-12 font-normal text-white">
               Supported formats: {supportedFormats.join(", ")} | Max file size: {maxSize}MB

@@ -8,12 +8,15 @@ type ModalPropsType = {
   to: Date | undefined;
   setFrom: (value: Date | undefined) => void;
   setTo: (value: Date | undefined) => void;
+  error: string;
 };
 
-const DateStep = ({ from, to, setFrom, setTo }: ModalPropsType) => {
+const DateStep = ({ from, to, setFrom, setTo, error }: ModalPropsType) => {
   const isInvalidPeriod = from && to ? from > to : false;
 
   const disableEndDate = (day: Date) => day < (from ?? new Date());
+
+  const errorMessage = isInvalidPeriod ? "Incorrect period" : error;
 
   return (
     <div className="flex flex-col gap-3">
@@ -23,7 +26,7 @@ const DateStep = ({ from, to, setFrom, setTo }: ModalPropsType) => {
         <DatePicker selectedDate={to} onChange={setTo} disable={disableEndDate} label="End Date" />
       </div>
 
-      {isInvalidPeriod && <ErrorField message={"Incorrect period"} />}
+      {(isInvalidPeriod || error) && <ErrorField message={errorMessage} />}
     </div>
   );
 };

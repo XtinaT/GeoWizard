@@ -9,27 +9,30 @@ import * as yup from "yup";
 
 import "swiper/css";
 import "swiper/css/pagination";
-import CustomButton from "./CustomButton";
+import CustomButton from "../CustomButton";
 import CustomTextInput from "./CustomTextInput";
-import { TextInput } from "../constants";
 import DateStep from "./DateStep";
 import DragAndDropInput from "./DragAndDropInput";
-import StepWrapper from "./StepWrapper";
+import { mockApi } from "../../actions";
+import { ApiError } from "../../actions/models";
+import { ModalType, TextInput } from "../../constants";
+import Modal from "../Modal";
+import StepWrapper from "../StepWrapper";
 
-/* type StepFormPropsType = {
-  onNext: () => void;
-  onEdit: () => void;
-  onCancel: () => void;
-  header: string;
-}; */
+type StepFormPropsType = {
+  onNext: (data: string) => void;
+};
 
-const StepForm = () => {
+const StepForm = ({ onNext }: StepFormPropsType) => {
   const [swiperRef, setSwiperRef] = useState<SwiperType>();
   const [isBeginning, setIsBeginning] = useState(true);
   const [isEnd, setIsEnd] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
-  const [file, setFile] = useState({ url: "", name: "" });
+  const [file, setFile] = useState<File>();
   const [isUploaded, setIsUploaded] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalContent, setModalContent] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handlePrevious = useCallback(() => {
     swiperRef?.slidePrev();
@@ -57,12 +60,22 @@ const StepForm = () => {
     description: yup.string().max(500, "Name must be 500 characters maximum"),
     startDate: yup.date().required("Start date is required"),
     endDate: yup.date().required("End date is required"),
-    // registeredAddress: requiredOnly(dictionary.accountSection.registeredAddress, dictionary),
   });
 
-  const handleSubmit = (values: typeof initialValues) => {
-    console.log(values);
+  const handleSubmit = async (values: typeof initialValues) => {
+    setIsSubmitting(true);
+    try {
+      const response = await mockApi.createProject({ ...values, file });
+      onNext(response.data);
+    } catch (error: unknown) {
+      setModalContent((error as ApiError).message);
+      setIsModalOpen(true);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
+
+  const handleCloseModal = () => setIsModalOpen(false);
 
   return (
     <div className="relative z-10 flex flex-col gap-5 w-full h-full max-w-screen-sm mx-auto tracking-wide">
@@ -70,21 +83,20 @@ const StepForm = () => {
         initialValues={initialValues}
         onSubmit={handleSubmit}
         validationSchema={validationSchema}
-        //enableReinitialize={false}
+        enableReinitialize={false}
       >
         {({ values, handleChange, errors, touched, handleBlur, isValid, setFieldValue }) => (
           <Form className="w-full flex flex-col gap-6 items-center">
             <span className="text-16 text-white">Kindly provide the following details</span>
             <div className="flex flex-col gap-4">
               <div className="max-w-[640px] flex">
-                {/* Swiper wrapped separately */}
                 <Swiper
                   spaceBetween={24}
                   slidesPerGroup={1}
                   slidesPerView={1.175}
                   centeredSlides
                   centeredSlidesBounds
-                  mousewheel
+                  //mousewheel
                   slideToClickedSlide
                   modules={[Mousewheel]}
                   onSwiper={(swiper: SwiperType) => {
@@ -138,6 +150,10 @@ const StepForm = () => {
                         to={values.endDate ? new Date(values.endDate) : undefined}
                         setFrom={(date) => setFieldValue("startDate", date ? date.toISOString() : undefined)}
                         setTo={(date) => setFieldValue("endDate", date ? date.toISOString() : undefined)}
+                        error={
+                          (errors.startDate && typeof errors.startDate === "string" ? errors.startDate : "") ||
+                          (errors.endDate && typeof errors.endDate === "string" ? errors.endDate : "")
+                        }
                       />
                     </StepWrapper>
                   </SwiperSlide>
@@ -145,9 +161,8 @@ const StepForm = () => {
                     <StepWrapper>
                       <DragAndDropInput
                         name="file"
-                        setFileURL={(url: string, name: string) => setFile({ url, name })}
-                        fileURL={file.url}
-                        fileName={file.name}
+                        setFile={setFile}
+                        file={file}
                         isUploaded={isUploaded}
                         setIsUploaded={setIsUploaded}
                         disabled={false}
@@ -187,13 +202,20 @@ const StepForm = () => {
             <div className="w-full max-w-[200px] flex mt-4">
               <CustomButton
                 text="Submit"
-                disabled={!isValid || !file.url || new Date(values.startDate) > new Date(values.endDate)}
+                disabled={!isValid || !file || new Date(values.startDate) > new Date(values.endDate)}
+                isLoading={isSubmitting}
               />
             </div>
             <div>{new Date(values.startDate) > new Date(values.endDate)}</div>
           </Form>
         )}
       </Formik>
+      <Modal isOpen={isModalOpen} onClose={handleCloseModal} type={ModalType.FAIL}>
+        <div className="flex flex-col gap-4 items-center">
+          <p className="text-white text-20 font-bold">Oops!</p>
+          <p className="text-white text-center text-16">{modalContent}</p>
+        </div>
+      </Modal>
     </div>
   );
 };
