@@ -5,3 +5,122 @@
 * {
   font-family: "Montserrat", sans-serif;
 }
+
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px grey;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #ffffff;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #131212;
+}
+
+.swiper-button-disabled {
+  background-color: rgba(255, 255, 255, 0.12);
+  cursor: not-allowed !important;
+}
+
+.kyc-prev::after {
+  content: url("./assets/icons/arrow-left-black.svg") !important;
+}
+
+.kyc-next::after {
+  content: url("./assets/icons/arrow-right-black.svg") !important;
+}
+
+.kyc-next::after,
+.kyc-prev::after {
+  position: absolute;
+  top: 6px;
+}
+
+.date-input {
+  -ms-appearance: none;
+  appearance: none;
+  margin-right: 1em;
+  overflow: hidden;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  color: inherit;
+}
+
+.date-input::-webkit-calendar-picker-indicator {
+  display: none;
+}
+
+.rdp {
+  --rdp-cell-size: 40px;
+  --rdp-caption-font-size: 18px;
+  --rdp-accent-color: none !important;
+  --rdp-background-color: transparent !important;
+  --rdp-accent-color-dark: transparent !important;
+  --rdp-background-color-dark: transparent !important;
+  --rdp-outline: none !important;
+  --rdp-outline-selected: none !important;
+  --rdp-selected-color: #48cdaf;
+}
+
+.rdp select {
+  background-color: #55595b;
+  color: black;
+  padding: 8px;
+  appearance: none;
+}
+
+.date-selected {
+  border-color: #48cdaf !important;
+  color: #48cdaf !important;
+}
+
+.date-selected:hover:not([disabled]) {
+  border-color: #48cdaf !important;
+  color: #48cdaf !important;
+}
+
+.rdp-day_today {
+  color: #48cdaf !important;
+  font-weight: 600;
+}
+
+.popup {
+  background-color: white;
+  border: 1px solid #ccc;
+  padding: 10px;
+  position: absolute;
+  max-width: 200px;
+  z-index: 999;
+}
+
+.modalWrapper::before {
+  content: "";
+  border-radius: 20px;
+  position: absolute;
+  inset: 0%;
+  z-index: -1;
+  --tw-backdrop-blur: blur(64px);
+  backdrop-filter: var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast)
+    var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity)
+    var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);
+}
+
+.blured::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 20;
+  background-color: rgba(32, 37, 39, 0.7);
+  backdrop-filter: blur(4px);
+}
